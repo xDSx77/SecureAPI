@@ -8,6 +8,7 @@ namespace SecureAPI.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [PersonalData]
         public string City { get; set; }
     }
 }
