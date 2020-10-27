@@ -1,0 +1,77 @@
+﻿@page
+@using SecureAPI.Areas.Identity.Pages.Backoffice
+@inject UserManager<ApplicationUser> UserManager
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+<h1>@ViewData["Title"] @EditModel.Role</h1>
+
+<div class="row">
+    @if (User.IsInRole("Admin"))
+    {
+    <div class="col-8 m-3">
+        <form method="post" target="_self">
+            <h2>Add to @EditModel.Role</h2>
+            <table class="table">
+                <tbody>
+                    @if (UserManager.Users != null)
+                    {
+                        @foreach (var user in UserManager.Users)
+                        {
+                            if (!await UserManager.IsInRoleAsync(user, EditModel.Role.Name))
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            @user.Email
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <input type="checkbox" id="@user.Id" name="addUser" value="@user.Id" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <h2>Remove from @EditModel.Role</h2>
+            <table class="table">
+                <tbody>
+                    @if (UserManager.Users != null)
+                    {
+                        @foreach (var user in UserManager.Users)
+                        {
+                            if (await UserManager.IsInRoleAsync(user, EditModel.Role.Name))
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            @user.Email
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <input type="checkbox" id="@user.Id" name="removeUser" value="@user.Id"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <div>
+                <button class="btn btn-primary" type="submit" id="saveButton" name="saveButton">Save</button>
+            </div>
+        </form>
+        <div>
+            <a asp-area="Identity" asp-page="/Backoffice/Manage" asp-route-returnUrl="/">Back to List</a>
+        </div>
+    </div>
+    }
+</div>

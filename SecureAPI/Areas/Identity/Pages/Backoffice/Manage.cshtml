@@ -1,0 +1,44 @@
+﻿@page
+@inject RoleManager<IdentityRole> RoleManager
+@model SecureAPI.Areas.Identity.Pages.Backoffice.ManageModel
+@{
+    ViewData["Title"] = "Manage Roles";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="col-8 m-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if (RoleManager.Roles != null)
+                {
+                    @foreach (var role in RoleManager.Roles)
+                    {
+                        <tr>
+                            <td>
+                                <div>
+                                    @role.Name
+                                </div>
+                            </td>
+                            <td>
+                                <a asp-area="Identity" asp-page="/Backoffice/Edit" asp-route-id="@role.Id">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
